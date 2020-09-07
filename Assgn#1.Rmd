@@ -1,0 +1,211 @@
+---
+title: "AMOD5240H_Assignment1"
+author: "Rachael Joan Dias"
+date: "29/09/2018"
+output: pdf_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+
+# Part I: DataCamp
+
+I have completed the Introduction to R module on DataCamp.
+
+
+# Part II: Short Answer
+
+# Answer 1.30:
+
+```{r}
+#Creating a vector to store the statistics scores of students
+Stats_Scores<-c(79, 83, 57, 82, 94, 83, 72, 74, 73, 71,66, 89, 78,81, 78, 81, 88, 69, 77, 79)
+
+#plotting a histogram of the scrores
+hist(Stats_Scores,xlab="Scores",ylab="Frequency",col="purple",
+xlim=c(40,100),ylim=c(0,10),las=1,breaks=5)
+```
+
+Explanation:
+1.) From the histogram it is clear that most of the students scored marks in the range of 70 to 90.
+
+2.) The histograms shows a bimodal distribution, there were more students who scored between 70-80 than there were students who scored between 80-90.
+
+# Answer 1.36
+
+Part a:
+The lower quartile Q1 can be calculated as,
+
+Q1=(1/4)*cummulative_frequency
+Q1=(1/4)*.375
+Q1=0.09375
+
+Locating Q1 on the cf axis we get the class in 20-30, Q1 lies between 20-30
+
+
+Similarly the upper quartile Q3 can be calculated as,
+
+Q3=(3/4)*cummulative_frequency
+Q3=(3/4)*.375
+Q3=.28125
+
+Locating Q3 on the cf axis we get the class in 0-10, Q3 lies between 0-10
+
+
+The median Q2 can be calculated as
+
+Q2=(1/2)*cummulative_frequency
+Q2=(1/2)*.375
+Q3=.1875
+
+Locating Q3 on the cf axis we get the class in 10-20, so the median is between 10-20.
+
+Part b:
+
+Mean=Sum of(frequency * mid-point class)/(Sum of frequency)
+Mean=23.1143/.925625
+Mean=24.971
+
+The mean of the dataset is larger than the median since most of the data is skewed to the left.
+
+# Answer 1.40:
+
+1. From the histogram we can see that the data is bimodal because it has 2 peaks, since it includes data for both men and women together.From the boxplot we can see that the median finishing time is 2.4 hrs. There are outlier beyond the point of the whiskers that
+extend beyond 2.8 hrs
+
+2. The bimodal distribution maybe be due to the fact that the data for men and women are represented together in the same histogram.Since men generally take lesser time to finish a marathon than women.
+  
+3. From the comparison of the boxplot it becomes clear that men finish marathons much faster than women. The boxplot or IQR men's finishing time is much smaller than the IQR for women's finishing time, which tells us that the finishing time for men is similar over the years while the spread of the boxplot for women is much larger
+.The outliers for men are beyond 2.4, while the oulier for women are beyond 2.8. The median finishing time for women is roughly 2.45 hrs and is skewed to the right while the median finishing time for men is roughly 2.2hrs and is in the middle of the boxplot
+
+4. The figure shows a comparison of the marathons finishing times for men and women seperately over the period from 1970 to 2000.
+It show us how the average marathon finishing times for men and women has decreased over the years.
+
+# Answer 2.22:
+```{r}
+# Part a
+pnorm(0, mean=.147, sd=.33)
+
+# Part b
+qnorm(.85, mean=.147, sd=.33)
+```
+Explanation: 
+
+Part a:
+32.79%, pnorm evaluates values to the left, since the question is asking for the percent of years the portfolio lost money we have to check for P(Z<0).
+
+Part b:
+48.9% or higher will be the cut-off for the highest 15% returns, we find the cut-off percent or the score by evaluating qnorm(1-.15) since qnorm also gives us values to the left.
+
+# Answer 2.24
+```{r}
+# Part a
+pnorm(48,mean=55,sd=6)
+
+# Part b  
+pnorm(65,mean=55,sd=6)-pnorm(60,mean=55,sd=6)
+
+# Part c
+qnorm(1-.10,55,6)
+
+# Part d
+pnorm(54,mean=55,sd=6)
+```
+Explanation:
+
+Part a:
+We are given a q value of 48 and we need to find the probability of P(X<48) so pnorm will give us the probability of a 10 year old being less than 48 inches
+
+Part b:
+the probability of person being between 65 and 60 inches can be calculated by minusing the 2 pnorm values P(X<65)-P(X<60)
+
+Part c:
+In order to calculate the height cut-off we have the probability of heights being less than the top 10%, and use qnorm(1-.10,mean,sd)
+
+Part d:
+the probablitiy of the height being less than 54 can be calculate by finding P(X<54)
+
+# Part 3: Simulation
+
+# Answer 2.4
+ 
+Part a:
+This is an experimental study invovling a control group and treatment group.
+
+Part b:
+Yes the study makes use of blinding, the controlled subjects received a placebo pill.
+
+Part c:
+```{r}
+#Pantibiotic-Pplacebo
+(66/85-65/81)
+```
+
+Part d:
+After calculating Pantibiotic-Pplacebo it seems that that the antiboitic has not had much of an impact on the patients. The proportion of patients who reported improvement were greater in the Placebo group than the antibitic group as per the statistic estimates made.
+
+Part e:
+The 2 claim are the,
+Null Hypothesis: The antibiotic has no impact on patients and cannot cure Sinusitis. There is no difference between
+patient who have taken the antibiotic and by patient who have not take it. 
+
+Alternative Hypothesis: The antibiotic does have an impact and can cure Sinusitis.
+
+Part f:
+```{r}
+#Code for 2.4
+results_sinus <- vector(length = 10000)
+
+for(j in 1:10000) {
+  Sinusitis <- c( rep(1, 131), rep(0, 35) )
+  set1 <- sample(Sinusitis, size = 85, replace = FALSE)
+  yes_in_set1 <- sum(set1)
+  yes_in_set2 <- 131 - yes_in_set1
+  diff_in_proportions <- yes_in_set1/85 - yes_in_set2/81
+  results_sinus[j]<- diff_in_proportions
+}
+
+hist(results_sinus)
+how_many <- results_sinus[results_sinus < -0.02599855]
+p_value=length(how_many)/10000
+p_value
+```
+Explaination: From the simulation experiment and p-value we can say that it does not support Null Hypothesis.
+
+# Answer 2.6:
+
+Part a:
+
+Null Hypothesis: In this case the Null Hypothesis states that having someone yawn near another person has no influence and will not make the other person yawn.
+
+Alternative Hypothesis: This states that if a person nearby yawns it will make another person feel like yawning.
+
+Part b:
+```{r}
+#Ptreatment-Pcontrol
+(10/34)-(4/16)
+```
+Part c:
+
+```{r}
+results_yawn <- vector(length = 10000)
+
+for(j in 1:10000) {
+  yawn <- c( rep(1, 14), rep(0, 36) )
+  set1 <- sample(yawn, size = 34, replace = FALSE)
+  yawn_in_set1 <- sum(set1)
+  yawn_in_set2 <- 14 - yawn_in_set1
+  diff_in_proportions <- (yawn_in_set1/34)-(yawn_in_set2/16)
+  results_yawn[j]<- diff_in_proportions
+}
+
+hist(results_yawn)
+how_many <- results_yawn[results_yawn < 0.044]
+p_value=length(how_many)/10000
+p_value
+```
+
+
+Explaination: From the simulation experiment and p-value we can conclude that it does not support Null Hypothesis.

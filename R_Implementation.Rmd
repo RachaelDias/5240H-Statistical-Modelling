@@ -1,0 +1,63 @@
+---
+title: "R_Implementation"
+author: "Rachael Joan Dias"
+date: "12/10/2018"
+output: pdf_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+```{r}
+library(readr)
+#Load the csv file and save as a data frame
+cardio<-read.csv("Cardiotocographic.csv")
+str(cardio)
+```
+
+```{r}
+#Convert the outcome variable NSP to factors
+cardio$NSPF<-as.factor(cardio$NSP)
+str(cardio)
+```
+
+```{r}
+#Multinomial Logistic regression
+library(nnet)
+
+#Considering level 1 which represents a normal patient as the reference level
+cardio$out<-relevel(cardio$NSPF, ref="1")
+
+#Fit a multinomial logistic regression model
+model<-multinom(out~LB+AC+FM, data=cardio)
+
+#Print summary of the model
+summary(model)
+```    
+
+
+```{r}
+#2-tailed z test
+z <- summary(model)$coefficients/summary(model)$standard.errors
+p <- (1 - pnorm(abs(z), 0, 1)) * 2
+p
+
+```
+
+**Predictions**
+```{r}
+#Printing prediction of our model
+head(predict(model,cardio, type="prob"))
+```
+
+**Misclassification Error**
+
+```{r}
+#Print confusion matrix of the model
+x<-table(predict(model),cardio$NSPF)
+print(x)
+
+#Error of the model
+1-sum(diag(x))/sum(x)
+```

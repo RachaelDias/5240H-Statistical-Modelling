@@ -1,0 +1,360 @@
+---
+title: "Assgn#2"
+author: "Rachael Joan Dias"
+date: "17/10/2018"
+output:
+  html_document:
+    df_print: paged
+  pdf_document: default
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+# Part 1: Academic Integrity
+
+"I am aware that I can discuss the questions on this assignment with others. However, sharing  my files or code with another person, or having someone share their files or code with me, is considered cheating.
+I am also aware that directly copying or even trying to reword answers from an Instructors' Solutions Manual to pass as my own is considered academic dishonesty.
+Finally, I am aware that failure to comply with any of Trent University's academic integrity rules will result in a grade of zero on my assignment and a statement of Academic Dishonesty on my transcript."
+
+# Part 2: DataCamp
+
+I have completed the Data Visualization in R module on DataCamp.
+
+# Part 3:
+
+1.) Question 3.4:
+
+(a) True, the distribution is right skewed since the sample size is only 12, it is very small. It produces success-failure values of 3 and 9 which do not satisfy the success-failure criteria(np>=10 & n(1-p)>=10) of the Central Limit Theorem for it to become a normal distribution. We can also confirm this from a plot of the sample distribution.	 	
+
+```{r}
+p<-.25
+n<-12
+
+#Success-failure criteria 
+(n*p)
+n*(1-p)
+```
+
+(b) True, it satisfies the success-failure criteria of the Central Limit Theorem producing values of 10 and 30. As the sample size increases the distribution becomes more normal. Therefore, a minimum random sample size of 40 the distribution of sample proportions of young Americans who have delayed starting a family due to the continued economic slump will be a normal distribution.
+```{r}
+p<-.25
+n<-40
+
+#Success-failure criteria 
+(n*p)
+n*(1-p)
+```
+
+(c) False, since it is -0.8164966 standard errors away from the mean, which is less than 2 standards errors from the mean it is not unusual.
+
+```{r}
+p0<-.25
+p_hat<-.20
+n<-50
+
+#Estimate the standard error
+(SE<-sqrt(p0*(1-p0)/n))
+
+#One proportion z-test statistic
+(z<-(p_hat-p0)/SE)
+```
+
+(d) False, since it is -1.414214 standard errors away from the mean, which is less than 2 standards errors from the mean it is not unusual.
+```{r}
+p0<-.25
+p_hat<-.20
+n<-150
+
+#Estimate the standard error
+(SE<-sqrt(p0*(1-p0)/n))
+
+#One proportion z-test statistic
+
+(z<-(p_hat-p0)/SE)
+```
+(e) False, it decreases the standard error of the sample proportion by 1/sqrt(3)
+
+2.) Question 3.8:
+
+(a) After verifying the margin of error we get a value of approximately 3%.
+
+(b) Since the margin of error is 3% this gives us a confidence interval of (63,69). We can conclude that the poll does not provide convincing evidence that more than 70% of the population think that licensed drivers should be required to retake their road test once they turn 65.
+
+```{r}
+#Estimated Standard Deviation
+p<-0.66
+n<-1018
+(SE_est=sqrt(p*(1-p)/n))
+
+#Margin of error
+(E=1.96*(SE_est))
+
+#Confidence Interval
+(c(.66-E,.66+E))
+```
+
+3.) Question 3.10:
+
+(a) The population parameter of interest is the proportion of Greek people that consider their life as suffering. The point estimate is .25.
+
+(b) It is a random sample and the observations are independent.
+The success-failure conditions are satisfied with np=250 >10 and n(1-p)=750 >10. The population of Greece is at least 10 times larger than the sample size.
+
+(c)We get a confidence interval of (22.31616, 27.68384). We are 95% confident that approximately 22% to 28% of Greeks feel that they are suffering.
+```{r}
+#Estimated Standard Deviation
+p<-0.25
+n<-1000
+(SE_est=sqrt(p*(1-p)/n))
+
+#Margin of error
+(E=1.96*(SE_est))
+
+#Confidence Interval
+(c(p-E,p+E)*100)
+```
+(d) If we use a higher confidence level, the confidence interval becomes wider and we are more sure that the true proportion falls within that range.
+
+(e) As the sample size increases the margin of error decreases, which results in a narrower confidence interval
+
+4.) Question 3.34:
+
+(a) Assume p1 is the proportion of mothers who have not taken Vitamins and have children with autism (No Vitamins).
+
+Assume p2 is the proportion of mothers who have taken vitamins and have children with autism (Vitamins).
+
+Null Hypothesis H0: p1=p2: There is no difference between p1 and p2
+
+Alternative Hypothesis Ha: p1≠p2: There is a difference between p1 and p2
+
+(b) Since the p-value is 0.002907335 which is much lower than a significance level of 0.05, we reject the Null Hypothesis and conclude that there is a difference in the proportion between mother's of autistic children who have taken and not taken prenatal vitamins
+
+```{r}
+#Checking the conditions
+p1<-111
+p2<-143
+n1<-181
+n2<-302
+
+#phat
+phat<-((p1+p2)/(n1+n2))
+
+n1*phat
+n1*(1-phat)
+
+n2*phat
+n2*(1-phat)
+
+#Hypothesis Test
+diff<-p1/n1-p2/n2
+(SE<-sqrt(phat*(1-phat)*(1/n1+1/n2)))
+
+#z-test statistic
+(z<-diff/SE)
+
+#p-value
+(1-pnorm(z))
+```
+
+(c) No, I do not find the title of the article to be appropriate. From the hypotheses test we can conclude that use of prenatal vitamins does not appear to be independant as there is a difference in the proportion between the 2 groups of mothers with autistic children who opted to take prenatal vitamins and those that didn't. Although, there might be a link between pre-natal vitamins and autism we cannot assume that it will ward off autism. Hence, we could title it "A link between prenatal vitamins and autism".
+
+5.) Question 3.42:
+
+(a) The Chi-squared test which is used to test for independance in a 2 way table.
+
+(b) Ho: The Null hypothesis states that there is no relation between caffeinated coffee consumption and depression in women. 
+    Ha: The Alternative hypothesis states that there is a relation between caffeinated coffee consumption and depression in women.
+
+(c)The percentage of women who suffer is 5.138059 and the percentage of women who don't suffer is 94.86194
+```{r}
+#Women who suffer indicated by yes and women who don't suffer indicated by no
+suffer_yes<-2607
+suffer_no<-48132
+total<-50739
+
+#Proportion of women who suffer and don't suffer
+(prop_suffer<-suffer_yes/total)
+(prop_dont_suffer<-suffer_no/total)
+```
+(d)The expected count for the highlighted cell is 339.9854. The contribution to the test statistic is 3.205914.
+
+```{r}
+#For observation 373 
+col_total<-6617
+
+#Expected outcome for 373 
+(exp_373<-col_total*prop_suffer)
+
+#Observed value
+obs_373<-373
+
+#Contribution of the cell to the test statistic
+(y<-(obs_373-exp_373)^2/exp_373)
+```
+(e) Therefore the test statistic is 20.93161 and the p-value is 0.0003267106.
+```{r}
+#vector for women who suffer and dont_suffer
+suffer<-c(670, 373, 905, 564, 95, 2607)
+dont_suffer<-c(11545, 6244, 16329, 11726, 2288, 48132)
+total<-c(12215, 6617, 17234, 12290, 2383, 50739)
+
+#calculation expected values for suffer and don't suffer
+exp_suffer<-prop_suffer*total
+exp_dont_suffer<-prop_dont_suffer*total
+
+#test statistic
+(chi_squared<-sum((suffer-exp_suffer)^2/exp_suffer +(dont_suffer-exp_dont_suffer)^2/exp_dont_suffer))
+
+#p-value
+(1-pchisq(20.93161, df=4))
+```
+
+(f) Since the p-value 0.000326710 is very small, we reject the Null Hypothesis. We can conclude that coffee consumption is linked to depression in women.
+
+(g) Yes, I agree with this statement based on the hypothesis test there is a link between coffee consumptions and depression in women.
+
+6.) 
+
+(a) Both the variables are categorical.
+```{r}
+fooddata<-read.csv(file='FoodConcern.csv',sep=',',header=T)
+foodtable<-table(fooddata$Gender,fooddata$Concern)
+colnames(foodtable)<-c("Concerned","Not concerned")
+rownames(foodtable)<-c("Boy","Girl")
+foodtable
+```
+
+(b)Approximately 63% of the girls are concerned whereas only 58% of the boys are concerned over potential environmental contaminants.
+```{r}
+prop.table(foodtable,1)*100
+```
+
+(c) Since a p-value of 0.7399792 is quite large as compared to alpha=0.05. We do not reject the Null Hypothesis. Therefore, we can conclude that gender and level of concern of contaminants are not related or there is no difference between the concern of contaminants between boys and girls.
+
+```{r}
+#chi-square test
+
+#Calculating the expected value
+expected <- as.array(margin.table(foodtable,1)) %*% t(as.array(margin.table(foodtable,2))) / margin.table(foodtable)
+
+#Calcualting the chi-squared
+chi <- sum((expected - as.array(foodtable))^2/expected)
+
+#p-value
+(1-pchisq(chi,df=1))
+```
+
+(d) Since a p-value of 0.7462 is large and is much greater than the significance level of 0.05. We fail to reject the Null Hypothesis. Once again, we can conclude that gender and level of concern for contaminants are not related.
+```{r}
+fisher.test(foodtable, alternative = "greater")
+```
+
+(e) Both the test give us the same conclusion, however the p-value in the chi-squared test is smaller compared to the p-value in the Fisher's Exact test. Chi-squared test are generally used when the sample size is larger, Fisher's test is best for testing associations between 2 categorical values and workds well with small size. In this case Fisher's Exact test is more accurate.
+
+(f) If the study had turned out differently, and we had seen more girls "concerned" and more boys "not concerned", we would have got a p-value = 1.6e-05 which is very small. In that case we would have to reject the Null Hypothesis and conclude that there is a relationship between gender and concern.
+```{r}
+fooddata1<-read.csv(file='FoodConcern1.csv',sep=',',header=T)
+foodtable1<-table(fooddata1$Gender,fooddata1$Concern)
+colnames(foodtable1)<-c("Concerned","Not concerned")
+rownames(foodtable1)<-c("Boy","Girl")
+foodtable1
+
+summary(foodtable1)
+```
+7.)
+(a) 
+```{r}
+#load the rivers file into a dataframe
+rivers<-read.csv(file='Rivers.csv',sep=',',header=F)
+names(rivers)<-c("length")
+rivers
+```
+(b)
+```{r}
+a<-c(1:9)
+benford<-function(x){
+  log10(1+1/x)
+}
+
+Probability_distribution<-sapply(a, FUN = benford)
+(as.data.frame(Probability_distribution))
+```
+(c)
+Null Hypothesis Ho: It states that the first digit of length of rivers follows Benford's Law
+Alternative Hypothesis Ha: It states that the first digit of length of rivers does not follow Benford's Law
+```{r}
+#Convert the length column to a vector
+rivers2<-rivers$length
+#rivers2
+
+#Extracts the first digit of the length's of rivers
+extract_first_digit <- function(x){ 
+as.numeric(head(strsplit(as.character(x),'')[[1]],n=1))
+}
+
+#apply first digit function to the vector
+first_digit <- sapply(rivers2, extract_first_digit)
+as.data.frame(first_digit)
+```
+
+```{r}
+#Combine the lengths and the first digit column
+rivers3<-cbind(rivers,first_digit)
+
+#frequency table
+library(plyr)
+tbl<-count(rivers3, 'first_digit')
+as.data.frame(tbl)
+names(tbl)<-c("first_digit","Observed_frequency")
+
+#Add the probability distribution
+y<-cbind(tbl,Probability_distribution)
+
+#Calculate the expected frequency and test statistic 
+y<-transform(y, expected=Probability_distribution*sum(Observed_frequency))
+y<-transform(y, chi=(Observed_frequency-expected)^2/expected)
+y
+
+#The Chi-squared statistic
+chi_sq<-sum(y$chi)
+chi_sq
+
+#p-value
+1-pchisq(chi_sq,8)
+```
+Since we get a p-value of 0.2840074, we accept the Null Hypothesis and conclude that the data fits Benford's law. In the context of this problem it would mean that the first digit of the length of rivers follow Benford's distribution.
+
+Graphically: 
+```{r}
+mu<-8
+sigma<-4
+rightend<-mu+3*sigma
+xvals<- seq(0,rightend,length=500)
+yvals<- dchisq(xvals,8)
+plot(xvals,yvals,type="l", xlim=c(0,rightend),main="Chi-squared density plot",xlab="x",ylab="y")
+abline(h=0,col="black")
+abline(v=9.736527,lty=3)
+xvals.sub<- c(9.736527,  xvals[xvals > 9.736527], rightend)
+yvals.sub<- c(0, yvals[xvals > 9.736527], 0)
+polygon(xvals.sub,yvals.sub, col="red")
+points(9.736527,0,col="blue",pch=15)
+```
+
+(d)
+```{r}
+digits<-c(1,2,3,4,5,6,7,8,9)
+sim_results<-vector(length = 10000)
+for(j in 1:10000)
+ {
+sim<- sample(x=digits, size=155, replace=T)
+sim_summary<-table(factor(sim, levels = 1:9))
+sim_results[j]<-sum((sim_summary-17.22)^2/17.22)
+}
+hist(sim_results)
+abline(v=9.736527, col="blue")
+pval<-length(which(sim_results>=9.736527))/10000
+pval
+```
+

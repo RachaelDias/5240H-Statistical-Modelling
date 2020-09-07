@@ -1,0 +1,137 @@
+---
+title: "Stats_Term_Project"
+author: "Rachael Joan Dias"
+date: "22/11/2018"
+output: pdf_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+```{r}
+library(ggplot2)
+library(Stat2Data)
+library(broom)
+library(dplyr)
+```
+```{r}
+#Load the MedGPA data from the Stats2Data library
+data("MedGPA")
+
+#Select the GPA and the Acceptance
+head(MedGPA%>%select(GPA,Acceptance))
+
+#Visualize the data using a scatter plot 
+data_points<-ggplot(data = MedGPA, aes(y = Acceptance, x = GPA))+geom_point()
+data_points
+```
+
+```{r}
+#Fit the logistic model using the glm function
+mod<-glm(Acceptance~GPA, data =MedGPA, family = binomial)
+summary(mod)
+```
+
+```{r}
+#Visualize the data with the logistics curve
+data_point<-ggplot(data = MedGPA, aes(y = Acceptance, x = GPA))+geom_point()
+
+#Add the logistics curve
+data_point + geom_smooth(method = "glm", se = FALSE, method.args = list(family = "binomial"))
+```  
+
+```{r}
+#Bin the GPA column and find the average GPA and Acceptance Rate for each bin
+MedGPA_binned<-MedGPA%>%mutate(Bins = cut(GPA, breaks=seq(0, 4, by=.20)))%>%group_by(Bins)%>%summarize(mean_GPA = mean(GPA),acceptance_rate = mean(Acceptance))
+MedGPA_binned
+```
+
+```{r}
+#Plot the binned Mean GPA
+data_point<-ggplot(data = MedGPA_binned, aes(x = mean_GPA, y = acceptance_rate)) + 
+  geom_point() + geom_line()
+
+#Augment the model, type.predict argument has been set to "response" to ensure fitted values are on the same scale as the response variable
+MedGPA_plus<-mod%>%augment(type.predict = "response")
+
+#plot logistic model on probability scale
+data_point +geom_line(data = MedGPA_plus, aes(x = GPA, y = .fitted), color = "red")
+```
+
+
+```{r}
+#Add Odds column to find the odds of acceptance
+MedGPA_binned<-MedGPA_binned %>%mutate(odds = acceptance_rate / (1 - acceptance_rate))
+
+#Plot the binned odds
+data_point<-ggplot(data = MedGPA_binned, aes(x = mean_GPA, y = odds)) + geom_point() +geom_line()
+
+#compute odds for observations
+MedGPA_plus<-MedGPA_plus %>%mutate(odds_hat = .fitted / (1 - .fitted))
+
+#Plot the logistic model on the odds scale
+data_point+geom_line(data = MedGPA_plus, aes(x = GPA, y = odds_hat), color = "red")
+```
+
+```{r}
+#Compute the log of the odds of acceptance
+MedGPA_binned<-MedGPA_binned%>%mutate(log_odds=log(acceptance_rate/(1 - acceptance_rate)))
+
+#Plot the log of the odds of acceptance for the binned GPA
+data_point<-ggplot(data = MedGPA_binned, aes(x = mean_GPA, y = log_odds)) +geom_point() + geom_line()
+
+# compute log odds for observations
+MedGPA_plus<-MedGPA_plus%>%mutate(log_odds_hat = log(.fitted/(1 - .fitted)))
+
+#Plot the logistic model on the log odds scale
+data_point+geom_line(data = MedGPA_plus, aes(x = GPA, y = log_odds_hat), color = "red")
+```
+
+```{r}
+#Create a new data frame
+new_data <- data.frame(GPA = 3.5)
+
+#Make predictions for new data frame
+augment(mod, newdata = new_data, type.predict = "response")%>%mutate(Acceptance=round(.fitted))
+```
+
+```{r}
+#Convert the data frame with binary predictions
+tidy_mod<-augment(mod, type.predict = "response")%>%mutate(Acceptance_hat = round(.fitted)) 
+  
+#Confusion Matrix
+tidy_mod%>%select(Acceptance, Acceptance_hat)%>%table()
+```
+```{r}
+ggplot(tidy_mod, aes(x=.fitted, y=Acceptance_hat))+geom_jitter(width=0, height=.05, alpha=.5)
+```
+
+```{r}
+#Hypothesis Testing
+#z-test statistic
+(zstat<-(5.454-0)/1.579)   
+
+#p-value
+(p_value<-2*(1-pnorm(zstat)))
+```
+
+```{r}
+#Confidence Interval for GPA
+UL<-5.454+1.96*1.579
+LL<-5.454-1.96*1.579
+
+#Confidence Interval for change of Log of odds ratio
+(CI<-c(UL,LL))
+
+#Confidence Interval for change of Log of odds ratio
+(exp(CI))
+```
+
+```{r}
+#Odds of being accepted
+exp(5.454)
+library(Stat2Data)
+data("MedGPA")
+summary(mod2<-glm(Acceptance~GPA+Sex+MCAT, data=MedGPA, family = binomial))
+```

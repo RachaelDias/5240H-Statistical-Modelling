@@ -1,0 +1,348 @@
+---
+title: "Assignment3_AMOD_5240H"
+author: "Rachael Joan Dias"
+date: "02/11/2018"
+output:
+  pdf_document: default
+  html_document:
+    df_print: paged
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+## Question 1 (4.2):
+
+```{r}
+#Upper and lower limit of confidence interval
+UL<-77
+LL<-65
+
+#Sample Mean
+(xbar<-(UL+LL)/2)
+
+#Margin of Error
+(ME<-(UL-LL)/2)
+
+#degrees of freedom
+n<-25
+df<-n-1
+
+#t-value
+t_value<-qt(.95,df)
+
+#Standard Deviation
+(sd<-ME*sqrt(n)/t_value)
+```
+
+## Question 2 (4.4):
+
+(a) Since $H_A : \mu>\mu_0$ we do a right tailed test, we get a $P$-value of 0.04260244 which is smaller than $\alpha$=0.05, hence we reject $H_0$.
+```{r}
+#Part a
+n<-11
+t<-1.91
+
+#p-value
+1-pt(t,n-1)
+```
+(b) Since $H_A : \mu<\mu_0$ we do a left tailed test, we get a $P$-value of 0.001646786 which is smaller than $\alpha$=0.05, hence we reject $H_0$.
+```{r}
+#Part b
+n<-17
+t<--3.45
+
+#p-value
+pt(t,n-1)
+```
+
+(c) Since $H_A : \mu\neq\mu_0$ we do a two tailed test, we get a $P$-value of 0.4383084 is quite large as compared to $\alpha$=0.05, we fail to reject $H_0$.
+```{r}
+#Part c
+n<-7
+t<-0.83
+
+#p-value
+2*(1-pt(t,n-1))
+```
+(d) Since $H_A : \mu>\mu_0$ we do a right tailed test, we get a $P$-value of 0.02121769 which is smaller than $\alpha$=0.05, we reject $H_0$.
+```{r}
+#Part d
+n<-28
+t<-2.13
+
+#p-value
+1-pt(t,n-1)
+```
+
+## Question 3 (4.30):
+
+Hypothesis: 
+
+$H_0 :\mu_{Automatic}=\mu_{Manual}$ (There is no difference between the mean fuel efficiency of cars with manual and those with automatic transmissions.)
+
+$H_A :\mu_{Automatic}\neq\mu_{Manual}$ (There is a significant difference between the mean fuel efficiency of cars with manual and those with automatic transmissions.)
+
+```{r}
+#Mean
+xbar_auto<-16.12
+xbar_man<-19.85
+
+#Standard deviation
+sd_auto<-3.58
+sd_man<-4.51
+
+#Sample size
+n_auto<-26
+n_man<-26
+
+#SE
+SE<-sqrt((sd_auto^2)/n_auto+(sd_man^2)/n_man)
+
+#t-statistic
+(t<-(xbar_auto-xbar_man)/SE)
+
+#degrees of freedom
+df<-25
+
+#p-value
+2*(pt(t,df))
+```
+
+Conclusion: A $P$-value of 0.002883615 is much less than $\alpha$=0.05, hence we reject $H_0$. In the context of this problem we can conclude that the mean fuel efficiency of cars with manual transmission is significantly different from those with automatic transmission.
+
+## Question 4 (4.40):
+
+(a) Hypothesis:
+
+$H_0 :\mu_{Less than HS}=\mu_{HS}=\mu_{Jr Coll}=\mu_{Bachelor's}=\mu_{Graduate}$ The average number of hours worked per week is the same for all the 5 groups.
+
+$H_A :$ The average number of hours worked per week is not the same for all the 5 groups, at least one means is different from the others.
+
+(b) Conditions and assumptions:
+
+1.) Independence between groups: We assume that the samples were randomly collected from a population.
+
+2.) Independence within groups: We assume that the samples were properly taken.
+
+3.) From the boxplot we can see that there is not much difference between the variance of the hours worked per week for the 5 groups. The variance is almost the same for the 5 groups.
+
+4.) Since the samples collected from each group are greater than 30 the distributions of the average working hours per week are approximately normal.
+
+(c) Table values
+```{r}
+#degrees of freedom
+k<-5
+n<-1172
+
+#degrees of freedom between
+(df_between<-k-1)
+
+#degrees of freedom within
+(df_within<-n-k)
+
+#Total
+n-1
+
+#Sum of Squares between
+MS_between<-501.54
+(SS_between<-(k-1)*MS_between)
+
+#Sum of Squares total
+SS_within<-267382
+(SS_total<-SS_between+SS_within)
+
+#Mean Square within
+(MS_within<-SS_within/(df_within))
+
+#F-value
+(f_value<-MS_between/MS_within)
+```
+
+(d) Conclusion: Assume $\alpha$=0.05, since we get a $P$-value of 0.0682 which is greater than $\alpha$=0.05, we fail to reject $H_0$. In the context of this problem we can conclude that there is no significant difference between the average hours worked per week for the 5 different groups.
+
+## Question 5:
+
+(a)
+```{r}
+v<-c(0.881,0.863,0.775,0.854,0.810,0.858,0.818,0.768,0.803,0.833,0.742,0.832,0.807,0.841,0.932)
+
+#Mean
+(xbar<-mean(v))
+
+#Standard deviation
+(s<-sd(v))
+
+#No. of observations
+(n<-length(v))
+```
+
+(b) Discussion: As the qqplot is close to being a straight line, we can assume normality. The histogram also shows an almost normal distribution, even though the sample size is small.
+```{r}
+#Histogram
+hist(v, col = "blue", xlab="Weight of Blue M&Ms", main="Histogram of M&Ms weight")
+
+#qqplot
+qqnorm(v, ylab="Weight of M&Ms", main="Normal Probability Plot")
+qqline(v, col="blue")
+```
+
+
+
+(c) Hypotheses:
+
+$H_0 :\mu=.82$ (the mean weight of the Blue M&Ms is equal to .82)
+
+$H_A :\mu>.82$ (the mean weight of the Blue M&Ms is greater than .82 )
+
+```{r}
+#Test-statistic
+mu<-.82
+(t<-(xbar-mu)/(s/sqrt(n)))
+
+#p-value
+1-pt(t,n-1)
+```
+Conclusion: Since we get a $P$-value of 0.2686079 which is greater than $\alpha$=0.05, we fail to reject $H_0$. In the context of this problem, we can conclude that the mean weight of the Blue M&Ms is not greater than .82.
+
+(d)
+
+```{r}
+xvals<-seq(-4,4,.01)
+yvals<-dt(xvals,14)
+plot(xvals,yvals, type="l", lty=1,ylab="Probability Distribution",xlab="t-statistic",col="black") 
+abline(v=0.6325605,lty=2, col="blue")
+xvals.sub<- c(0.6325605,  xvals[xvals > 0.6325605],4)
+yvals.sub<- c(0, yvals[xvals > 0.6325605], 0)
+polygon(xvals.sub,yvals.sub, col="red")
+arrows(2,0.15,1,.05)
+text(3,.17,labels="area of 0.2686079")
+title("T-density Plot, 14df")
+```
+
+## Question 6:
+
+```{r}
+#Save the treatment and control groups as vectors
+control<-c(46, 22, 10, 14, 26, 29, 29, 47, 20, 13)
+treatment<-c(2, 32, 30, 3, 14, 32, 2, 39, 18, 2)
+
+#Difference between treatment and control groups
+diff<-treatment-control
+```
+
+Hypotheses:
+
+$H_0 :\mu_{diff}=0$ (the mean difference between the treatment and control group is 0, i.e no difference)
+
+$H_A :\mu_{diff}<0$ (there is a difference between the treatment and control groups, the soarness levels is less for the treatment group)
+
+The qqplot almost forms a straight line, hence we can justify the assumption of normality.
+```{r}
+##Histogram and qqplot
+qqnorm(diff, ylab="Diff b/w Treatment and Control Groups", main="Normal Probability Plot")
+qqline(diff, col="blue")
+hist(diff, xlab="Difference between Treatment and Control Groups", col="cyan",
+main = "Histogram of Difference")
+```
+
+```{r}
+#Test Statistic and p-value
+xbar<-mean(diff)
+s<-sd(diff)
+n<-length(diff)
+SE<-s/sqrt(n)
+(tstat<-xbar/SE)
+(pt(tstat,n-1))
+t.test(diff, alternative="less")
+```
+Conclusion: Since we get a $P$-value of 0.09312 which is greater than $\alpha$=0.01, we fail to reject $H_0$. In the context of this problem, we can conclude the treatment did not reduce the soarness in the arm significantly.
+
+## Question 7:
+
+(a) The mean of those who were assigned 10% is 15.12982, while the mean of those who were assigned 65% is 39.50746. The sample means of those who were assigned 10% is much lesser than those who were assigned 65%
+
+```{r}
+#Read csv file and save it as a dataframe
+Africa<-read.csv(file="anchoring.csv", header=TRUE, stringsAsFactors = FALSE)
+
+#Filter the students who were assigned 10% and save their estimate in Africa_10
+Africa_10<-Africa[Africa$Starting.point==10,"Africa.Estimate"]
+
+#Filter the students who were assigned 65% and save their estimate in Africa_65
+Africa_65<-Africa[Africa$Starting.point==65,"Africa.Estimate"]
+
+#Means
+(xbar_10<-mean(Africa_10))
+(xbar_65<-mean(Africa_65))
+```
+(b) 
+
+Assumptions: 
+
+1. The students were randomly assigned 10% and 65% starting points.
+
+2. The 2 samples do not have any relationship with each other, they are independant of each other. Both the sample sizes are greater than 30.
+
+Hypothesis:
+
+$H_0 :\mu_{10}=\mu_{65}$ (the mean estimate of United Nation member states in Africa is the same for students who were assigned 10% and 65%)
+
+$H_A :\mu_{10}<\mu_{65}$ (the mean estimate of United Nation member states in Africa is lower for those who were assigned 10% than those who were assigned 65%)
+```{r}
+#t-statistic and P-value
+sd_10<-sd(Africa_10)
+sd_65<-sd(Africa_65)
+n_10<-length(Africa_10)
+n_65<-length(Africa_65)
+
+
+SE<-sqrt(sd_10^2/n_10 + xbar_65^2/sd_65) 
+(tstat<-(xbar_10-xbar_65)/SE)
+Afric_df<-min(n_10-1,n_65-1)
+(pt(tstat,Afric_df))
+```
+
+Conclusion: Since we get a $P$-value of 0.003816838 which is less than $\alpha$=0.05, we reject $H_0$. In the context of this problem, we can conclude that the students who received a quantity of 10% have a lower mean estimate of United Nations member states in Africa as compared to the group who were assigned 65%. Thus, we can also conclude that a starting point for a numerical answer can be a source of bias in surveys.
+
+
+## Question 8:
+
+(a)
+```{r}
+#Read csv file and save it as a dataframe
+cars<-read.csv(file="chest.csv", header=TRUE, stringsAsFactors = FALSE)
+```
+
+(b) The standard deviation variations are not too high, as the largest standard deviation is less than twice the smallest standard deviation. It fulfills the standard deviation assumption.
+```{r}
+#Mean weight for 3 groups
+(cars_mean<-tapply(cars$CHEST,INDEX=cars$SIZE,FUN=mean))
+
+#Standard Deviation for 3 groups
+(cars_sd<-tapply(cars$CHEST,INDEX=cars$SIZE,FUN=sd)) 
+```
+(c) From the boxplot we can see that the means are different for the 3 groups of cars. 
+```{r}
+#Comparative boxplots with means represented by x
+boxplot(cars$CHEST ~ cars$SIZE, col="purple", 
+main="Boxplot of Chest Deceleration for 3 different car sizes", xlab="Car Sizes", 
+ylab="Chest Deceleration")
+points(1:3, cars_mean, pch = 4)  
+```
+
+(d) Hypothesis:
+
+$H_0 :\mu_{small}=\mu_{midsize}=\mu_{large}$ (the mean chest deceleration measurements for the 3 groups of cars (Small, Medium and Large) are the same)
+
+$H_A :$ At least one mean of chest deceleration measurements is different among the 3 car groups or at least one mean is not equal to another.
+
+(e)
+```{r}
+#ANOVA test
+cars_anova<-aov(CHEST~SIZE, data = cars)
+summary(cars_anova)
+```
+
+Conclusion: Since we get a $P$-value of 0.0606  which is greater than $\alpha$=0.01, we fail to reject $H_0$. In the context of this problem, we can conclude that the mean of chest deceleration measurements is not significantly different among the 3 groups of cars or there is no mean which is different from the others.

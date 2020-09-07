@@ -1,0 +1,263 @@
+---
+title: "Assignment#4_Stats"
+author: "Rachael Joan Dias"
+date: "16/11/2018"
+output: pdf_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+## Question 1 (5.4):
+
+- Plot (a): Since there is little vertical variation the strength of the relationship is strong. However, the shape is a curve which means the relationship is not linear hence it is not reasonable to fit a linear model.
+
+- Plot (b): Since there is little vertical variation the strength of the relationship is strong.  However, the shape is a curve which means the relationship is not linear hence it is not reasonable to fit a linear model.
+
+- Plot (c): Since there is little vertical variation the strength of the relationship is strong. There is an uphill trend and the shape is linear which means that there is a positive relationship or correlation, hence it is reasonable to fit a linear model.
+
+- Plot (d): Since there is a lot of vertical variation the strength of the relationship is weak and also there is no predictable pattern, hence it is not reasonable to fit a linear model.
+
+- Plot (e): Since there is a lot of vertical variation the strength of the relationship is weak. The points show a downhill trend even though they are far apart from each other, the shape is linear. It is possible to fit a linear model.
+
+- Plot (f): Since there is some amount of vertical variation the strength of the relationship is moderate. There is a downhill trend and the shape is linear which means that there is a negative relationship or correlation, hence it is reasonable to fit a linear model.
+
+
+## Question 2 (5.8):
+
+- Scatterplot(1) matches with (d), R=-0.85: Since the R value is high it indicates a strong linear relationship, the first plot(1) has the least amount of vertical variation and exhibits a downhill trend hence it has the strongest linear relationship compared to the others.
+
+- Scatterplot(2) matches with (a), R=0.45: The second graph plot(2) has a lot of vertical variation, however it has an uphill trend which indicates a positive correlation.
+
+- Scatterplot(3) matches with (c), R=-0.03: The third scatterplot plot(3) indicates a non-linear relationship hence the value of R is very small.
+
+- Scatterplot(4) matches with (b), R=-0.48: The fourth scatterplot plot(4) has a lot of vertical variation, however it has a downhill trend which indicates a negative correlation.
+
+
+## Question 3 (5.10):
+
+(a) There is a weak relationship between the volume and the height of the trees indicated by the vertical spread, the trend is weak. The scatterplot shows an uphill linear trend which means that there is a positive correlation between the volume and height of the tree.
+
+(b) There is a strong relationship between the volume and the diameter of the trees as there is very little vertical spread. The scatterplot shows an uphill linear trend which means that there is a positive correlation between the volume and diameter of the tree.
+
+(c) I would prefer to use the diameter measurements to predict the volume of the tree using a simple linear regression model, because the relationship between diameter and volume is stronger than the relationship between height and volume as there is less vertical spread.
+
+
+## Question 4 (5.22):
+
+- Plot(a): Since the outlier is horizontally away from the center of the cloud of points in the scatter plot it is a high leverage point. It is also an influential point because it is influencing the slope of the regression line, it pulling the slope of the regression line towards it.
+
+- Plot(b): The outlier is a high leverage point because it is away from the center of the cloud of points in the scatter plot, it is not an influential point because it falls along the regression line, with and without the outlier the slope of the regression line remains the same.
+
+- Plot(c): The outlier is a high leverage point because it is away from the center of the cloud of points, it is not an influential point because it is not impacting the slope of the regression line.
+
+
+## Question 5 (5.30):
+
+(a) 
+
+Hypothesis:
+
+$H_0: \beta1=1$ The Null Hypothesis states that the slope is equal to 1 which means that the age difference between husbands and wives are consistent across ages.
+
+$H_1: \beta1\neq1$ The Alternative Hypothesis states that the slope is not equal to 1, which means that the age difference between husbands and wives differ for different ages.
+
+Since we have a $P$-value of 0, we reject $H_0$, hence we can conclude that the age difference between husband and wives differ for different age groups.
+
+(b) The general mathematical equation for linear regression is: $Y = a + bX$, where 'Y' is the response variable in this case the wife's age and 'X' is the predictor variable here the husband's age.
+
+Therefore the equation predicting the wife's age can be represented as follows,
+    
+    Predicted_wife_age=1.5740+0.9112*husband_age
+
+(c) Every one year increase in the husband's age is associated with a 0.9112 increase in the wife's age. The intercept 1.5740 is the age of the wife when the husband's age is 0, in this context the intercept is meaningless.
+
+(d) Since the slope is positive, the correlation coefficient 'r' will also be positive.
+
+Given that $R^2=.88$, the correlation coefficient 'r' is 0.9380832, which implies there is a strong positive correlation between the wife's age and husband's age.
+
+```{r}
+R_square<-.88
+(r<-sqrt(R_square))
+```
+
+(e) Based on this linear model the predicted wife's age will be 51.69 years. Since $R^2=.88$ the model accounts for 88% variation in the wife's age that can be explained by the linear relationship between her husband's age, hence the model is reliable.
+
+```{r}
+husband_age<-55
+(pred_wife_age<-1.5740+0.9112*(husband_age))
+```
+
+(f) No, it wouldn't be wise to use the same model to predict the age of the wife of a man who is 85 years since it is beyond the range of the data. We should not extrapolate and make predictions beyond the range of the data.
+
+
+## Question 6 (5.32):
+
+(a) Since the regression line shows a downhill trend, we can conclude that there is a negative correlation. The correlation coefficient 'r' is -0.5291503.
+
+```{r}
+R_square<-.28
+(r<--1*sqrt(R_square))
+```
+
+(b) The residual plot doesn't have a slope, this indicates that the condition of linearity holds true. However, the points on the residual plot have a wedge shape they are narrow on the left and widen towards the right as the x-axis increases, this means that the SD of the residuals is not constant. Since the constant standard deviation condition is not met it is not reasonable to fit a simple least squares for the data. 
+
+## Question 7:
+
+(a) 
+```{r}
+# Read text file buildings.txt
+bldg<-read.delim("buildings.txt")
+```
+
+(b) Yes, there is a strong linear relationship between stories and buildings. There is little vertical variation and an uphill trend(positive slope) which indicates a positive relationship between the variables, the shape of the points is linear.
+```{r}
+library(ggplot2)
+ggplot(bldg, aes(x=Stories, y=Height))+geom_point(color="blue")+ylab("Height")+xlab("Stories")+
+ggtitle("Relationship between Stories and Height")
+```
+
+(c) The correlation coefficient is 0.9505549 which is close to 1, which means that the stories and height or buildings are strongly positively correlated. There is a strong linear relationship.
+```{r}
+x<-bldg$Stories
+y<-bldg$Height
+cor(x, y)
+```
+
+(d)The equation of a regression line is given by $y=Intercept+slope*x$, 
+
+In the context of this problem it can be written as, 
+$BuildingHeight=90.3096+11.2924*Stories$ from the summary of the linear model.
+```{r}
+linear_model<-lm(Height~Stories,bldg)
+summary(linear_model)
+
+#ggplot(bldg, aes(x=Stories, y=Height))+geom_smooth(method=lm)+ 
+#geom_point(color="black")+ylab("Height")+
+#xlab("Stories")+
+#ggtitle("Relationship between Stories and Height")
+shapiro.test(bldg$Stories)
+```
+
+
+(e) Test for significance of regression
+
+$H_0: \beta1=0$ The Null Hypothesis states that the slope is equal to 0.
+
+$H_1: \beta1\neq0$ The Alternative Hypothesis states that the slope is not equal to 0.
+
+Since we get a $P$-value of 0 which is very small compared to $\alpha$=0.05, we reject $H_0$, the slope is not equal to 0. 
+
+Yes the model can be used for predictions based on the summary from (d) with a $P$-value of 2e-16 the model is good for predictions.
+```{r}
+#Test statistic
+estimate<-11.2924     
+null_value<-0
+SE<-0.4844
+(t<-(estimate-null_value)/SE)
+
+#p-value
+2*(1-pt(t,58))
+```
+
+(f) The coefficient of determination is 0.9036 given by the Multiple R-squared in the summary. This means that 90.36% variability is explained by the linear model.
+
+(g) Since the residual plot does not have any obvious pattern, no slope it confirms linearity. From the  normal quantile plot of residuals we can see that the distribution that is approximately normal.
+
+```{r}
+par(mfrow =c(1,2)) 
+plot(bldg$Stories, linear_model$residuals, main="Explanatory variable vs. residuals", 
+ylab="Residuals", xlab="Stories", col="blue")
+abline(0,0,col="red") 
+qqnorm(linear_model$residuals) 
+```
+
+## Question 8:
+
+From the correlation matrix we can see that many of the explanatory variables are highly correlated with each other. Hence we remove some of the explanatory variables that are highly correlated such as bia.di(biacromial diameter in cm), che.di(chest diameter in cm), elb.di (elbow diameter in cm), wri.di(wrist diameter in cm), bic.gi (bicep girth in cm), sho.gi (shoulder girth in cm), bic.gi (bicep girth in cm) and ank.di (ankle diameter in cm).
+```{r}
+library(openintro)
+data(bdims)
+a<-bdims
+
+#Pairwise correlations
+#cor(a)
+```
+
+
+Considering the following predictor variables for the multiple regression model, we construct model1.
+```{r}
+model1<-lm(a$wgt~a$age+a$hgt+a$sex+a$bii.di+a$bit.di+a$che.de+a$kne.di+a$che.gi+a$wai.gi
++a$nav.gi+a$hip.gi+a$thi.gi+a$for.gi+a$kne.gi+a$cal.gi+a$ank.gi+a$wri.gi)
+summary(model1)
+```
+
+From the summary of model1 we can see that there are quite a few insignificant variables indicated by their high $P$-values. We remove variables having $P$-value>0.05 one step at a time. First, we remove "ank.gi" since it has a $P$-value of 0.826760 which is higher compared to the other variables and we construct model2. 
+
+From the summary of model2 we can see there is a slight increase in the value of Adjusted R-squared, which means that model2 is able to explain 97.47% variability in weight with less variables as compared to model1, hence model2 is a better model. There is also a decrease in the standard error from 2.126  to 2.124. The overall $P$-value of 2.2e-16 is the same for both the models.
+
+```{r}
+model2<-lm(a$wgt~a$age+a$hgt+a$sex+a$bii.di+a$bit.di+a$che.de+a$kne.di+a$che.gi+a$wai.gi
++a$nav.gi+a$hip.gi+a$thi.gi+a$for.gi+a$kne.gi+a$cal.gi+a$wri.gi)
+summary(model2)
+```
+We remove "bit.di" since it has the next highest $P$-value to build model3. The Adjusted R-squared remains the same however, the Residual standard error is 2.122 which is less than the previous model, the number of variables has also reduced. We can conclude that model3 is better than model2 and move on to remove some more attributes.
+```{r}
+model3<-lm(a$wgt~a$age+a$hgt+a$sex+a$bii.di+a$che.de+a$kne.di+a$che.gi+a$wai.gi+a$nav.gi
++a$hip.gi+a$thi.gi+a$for.gi+a$kne.gi+a$cal.gi+a$wri.gi)
+summary(model3)
+```
+
+We remove "nav.gi" having $P$-value of 0.70437. After removing "nav.gi" we can see that there is a slight increase in the Adjusted R-squared to 0.9748, there is even a slight decrease in  the Residual standard error, $P$-value remains the same. Model4 is able to explain 97.48% variability in the data it has a lower Residual standard error compared to the previous models and less variables hence it is a better model than any of the previous models.       
+
+```{r}
+model4<-lm(a$wgt~a$age+a$hgt+a$sex+a$bii.di+a$che.de+a$kne.di+a$che.gi+a$wai.gi+a$hip.gi+
+a$thi.gi+a$for.gi+a$kne.gi+a$cal.gi+a$wri.gi)
+summary(model4)
+```
+We continue to remove "wri.gi" which has the highest $P$-value in model4. After doing so, we can see that the Adjusted R-squared, Residual standard error and p-value remains the same. Model5 is still better than model4 because it has less variables.
+
+```{r}
+model5<-lm(a$wgt~a$age+a$hgt+a$sex+a$bii.di+a$che.de+a$kne.di+a$che.gi+a$wai.gi+a$hip.gi+
+a$thi.gi+a$for.gi+a$kne.gi+a$cal.gi+a$wri.gi)
+summary(model5)
+```
+We remove "wri.gi" which has a $P$-value of 0.409888. There is a slight decrease in the Residual standard error, the Adjusted R-squared remains the same as model5, but model6 is still better because it has less variables and can explain the same variability as model5.
+
+```{r}
+model6<-lm(a$wgt~a$age+a$hgt+a$sex+a$bii.di+a$che.de+a$kne.di+a$che.gi+a$wai.gi+a$hip.gi
++a$thi.gi+a$for.gi+a$kne.gi+a$cal.gi)
+summary(model6)
+```
+
+We remove "kne.gi" the Residual standard error and Adjusted R-squared remains the same. Model7 is better than model6 because it has lesser variables.
+```{r}
+model7<-lm(a$wgt~a$age+a$hgt+a$sex+a$bii.di+a$che.de+a$kne.di+a$che.gi+a$wai.gi+a$hip.gi
++a$thi.gi+a$for.gi+a$kne.gi+a$cal.gi)
+summary(model7)
+```
+We remove "bii.di" the Residual standard error increases and Adjusted R-squared decreases. Model7 is better than model8.
+```{r}
+model8<-lm(a$wgt~a$age+a$hgt+a$sex+a$che.de+a$kne.di+a$che.gi+a$wai.gi+a$hip.gi+a$thi.gi+
+a$for.gi+a$kne.gi+a$cal.gi)
+summary(model8)
+```
+- model7 can be represented by the following linear regression equation,
+
+$wgt=-120.74595-0.05499*age+0.31854*hgt-1.16200*sex+che.de*0.24703+0.57342*kne.di+0.22577*che.gi+0.37635*wai.gi+0.23047*hip.gi+0.24196*thi.gi+0.61676*for.gi+0.18465*kne.gi+0.36864*cal.gi$
+
+- model7 has a lower AIC value than model8, hence model7 is preferred.
+
+```{r}
+AIC(model7,model8)
+```
+- From the residual plot of model7 there is no trend hence the condition of linearity is met. It lacks a wedge shape hence it fulfills the standard deviation condition.
+- The normal probability plot of model7 follows a straight line hence the condition of normality is satisfied.
+```{r}
+par(mfrow =c(1,2)) 
+plot(model7,1)
+plot(model7,2) 
+```
+
+- To conclude, after conducting a step-wise P-value selection multivariate regression analysis, we end up with model7 which has a high Adjusted R-squared as compared to any of the other models and low Residual standard error. Even though model8 has lesser variables than model7 its Residual standard error is high and Adjusted R-squared is low. Therefore, model7 is the best model in terms of Adjusted R-squared and Residual standard error.
